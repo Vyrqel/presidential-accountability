@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presidential Accountability and the Law</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0f;
+    --surface: #15151a;
+    --surface2: #1e1e26;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --muted: #8a8790;
+    --accent: #c8a96e;
+    --accent2: #e2c98a;
+    --red: #d45a4a;
+    --red-dim: rgba(212,90,74,0.15);
+    --teal: #4aabb4;
+    --teal-dim: rgba(74,171,180,0.12);
+    --gold-dim: rgba(200,169,110,0.12);
+    --serif: 'Playfair Display', Georgia, serif;
+    --body: 'Source Serif 4', Georgia, serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    gap: 0;
+    background: rgba(13,13,15,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    overflow-x: auto;
+  }
+
+  nav a {
+    display: block;
+    padding: 1rem 1.25rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: var(--body);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  nav a:hover, nav a.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* SECTIONS */
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 7rem 3rem 4rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  section.wide { max-width: 1100px; }
+
+  /* HERO */
+  #hero {
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-ornament {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(200,169,110,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    font-family: var(--body);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .thesis-block {
+    margin: 3rem auto 0;
+    max-width: 700px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(200,169,110,0.3);
+    border-radius: 4px;
+    padding: 2rem 2.5rem;
+    text-align: left;
+    position: relative;
+  }
+
+  .thesis-block::before {
+    content: 'Thesis';
+    position: absolute;
+    top: -11px;
+    left: 2rem;
+    background: var(--bg);
+    padding: 0 0.75rem;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: var(--body);
+  }
+
+  .thesis-block p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* SECTION HEADERS */
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: var(--body);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border2);
+    max-width: 80px;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  /* EVIDENCE CARDS */
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.75rem;
+    position: relative;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+  }
+
+  .card-number {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(200,169,110,0.15);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .card p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-top: 0.75rem;
+  }
+
+  .cite-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 11px;
+    color: var(--accent);
+    font-family: var(--body);
+    letter-spacing: 0.05em;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+    width: 100%;
+  }
+
+  /* QUOTE PULL */
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.95rem;
+    background: var(--gold-dim);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .pull-quote cite {
+    display: block;
+    font-style: normal;
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* COUNTERARGUMENT */
+  .counter-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) {
+    .counter-layout { grid-template-columns: 1fr; }
+    section { padding: 6rem 1.5rem 3rem; }
+  }
+
+  .counter-box {
+    padding: 1.75rem;
+    border-radius: 8px;
+  }
+
+  .counter-box.claim {
+    background: var(--red-dim);
+    border: 1px solid rgba(212,90,74,0.25);
+  }
+
+  .counter-box.rebuttal {
+    background: var(--teal-dim);
+    border: 1px solid rgba(74,171,180,0.25);
+  }
+
+  .box-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: var(--body);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .box-label.red { color: var(--red); }
+  .box-label.teal { color: var(--teal); }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot.red { background: var(--red); }
+  .dot.teal { background: var(--teal); }
+
+  /* HIERARCHY VIZ */
+  .hierarchy {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .h-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .h-bar {
+    height: 48px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: var(--body);
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .h-bar.exempt {
+    background: linear-gradient(90deg, rgba(212,90,74,0.3), rgba(212,90,74,0.1));
+    border: 1px solid rgba(212,90,74,0.4);
+    color: #e8907f;
+    width: 100%;
+  }
+
+  .h-bar.accountable {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .h-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    white-space: nowrap;
+    min-width: 160px;
+    font-family: var(--body);
+  }
+
+  .h-tag {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: auto;
+  }
+
+  .h-tag.yes { background: rgba(212,90,74,0.2); color: var(--red); }
+  .h-tag.no { background: rgba(74,171,180,0.2); color: var(--teal); }
+
+  /* CONCLUSION */
+  #conclusion {
+    text-align: center;
+  }
+
+  .conclusion-pull {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text);
+    max-width: 720px;
+    margin: 2rem auto;
+    font-style: italic;
+  }
+
+  /* WORKS CITED */
+  #works-cited {
+    min-height: auto;
+    padding-top: 5rem;
+  }
+
+  .citation {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .citation:last-child { border-bottom: none; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  /* SCROLL PROGRESS */
+  #progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--accent);
+    z-index: 200;
+    transition: width 0.1s linear;
+  }
+
+  p + p { margin-top: 1rem; }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav id="nav">
+  <a href="#hero" class="active">Home</a>
+  <a href="#evidence">Evidence</a>
+  <a href="#accountability">Accountability</a>
+  <a href="#counterargument">Counterargument</a>
+  <a href="#conclusion">Conclusion</a>
+  <a href="#works-cited">Works Cited</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-ornament"></div>
+  <h1>Presidential Accountability<br>and <em>the Law</em></h1>
+  <p class="subtitle">Colin Moyer &nbsp;·&nbsp; Government SS04151 &nbsp;·&nbsp; April 2026 &nbsp;·&nbsp; Website assistance by Claude </p>
+
+  <div class="thesis-block">
+    <p>A constitutional amendment is required to eliminate presidential immunity and disqualify federal felons from holding office, because no person holding office should be above the law they are supposed to protect.</p>
+  </div>
+</section>
+
+<!-- EVIDENCE -->
+<section id="evidence" class="wide">
+  <p class="section-label">Evidence</p>
+  <h2>Three pillars of the argument</h2>
+
+  <div class="evidence-grid">
+    <div class="card">
+      <div class="card-number">01</div>
+      <h3>The 2024 immunity ruling created an unprecedented legal class</h3>
+      <p><em>Trump v. United States</em> established a three-tier immunity system - absolute, presumptive, and none - without defining what separates an "official" from an "unofficial" act. This ambiguity grants the most powerful office the least accountability, contradicting the equal protection clause of the 14th Amendment.</p>
+      <span class="cite-tag">Source: Delahunty & Yoo, Harvard Journal of Law &amp; Public Policy, 2024</span>
+    </div>
+
+    <div class="card">
+      <div class="card-number">02</div>
+      <h3>The Constitution does not bar convicted felons from the presidency</h3>
+      <p>Federal statute 18 U.S.C. § 2071 disqualifies anyone convicted of mishandling classified files from federal office - yet constitutional requirements for the presidency mention only age, citizenship, and residency. Because presidential requirements are embedded in the Constitution, Congress cannot add restrictions without a formal amendment.</p>
+      <div class="pull-quote" style="margin: 1rem 0 0;">
+        "Because the Constitution does not mention criminal records, a person indicted or convicted of a felony would not be barred from serving."
+        <cite>- VOA News</cite>
+      </div>
+      <span class="cite-tag">Sources: VOA News; HowStuffWorks</span>
+    </div>
+
+    <div class="card">
+      <div class="card-number">03</div>
+      <h3>State law already disqualifies felons from public office</h3>
+      <p>Many states bar convicted felons from holding state office. The same conviction that ends a state political career leaves a person fully eligible for the presidency - the nation's most powerful position. If states have independently recognized criminal convictions as grounds for disqualification, the absence of a federal standard is a glaring inconsistency.</p>
+      <span class="cite-tag">Source: Houston Law Review, 2024</span>
+    </div>
+  </div>
+</section>
+
+<!-- ACCOUNTABILITY HIERARCHY -->
+<section id="accountability">
+  <p class="section-label">Analysis</p>
+  <h2>Who can be held accountable?</h2>
+  <p style="color: var(--muted);">Every federal official - except the one with the most power - is subject to criminal prosecution for misconduct. The bar below represents relative authority; the tag shows criminal exposure.</p>
+
+  <div class="hierarchy">
+    <div class="h-row">
+      <span class="h-label">President</span>
+      <div class="h-bar exempt" style="width:100%">Broadest executive authority <span class="h-tag yes">Immune (post-2024)</span></div>
+    </div>
+    <div class="h-row">
+      <span class="h-label">Military commanders</span>
+      <div class="h-bar accountable" style="width:75%">Can be court-martialed <span class="h-tag no">Accountable</span></div>
+    </div>
+    <div class="h-row">
+      <span class="h-label">Cabinet secretaries</span>
+      <div class="h-bar accountable" style="width:60%">Can be indicted <span class="h-tag no">Accountable</span></div>
+    </div>
+    <div class="h-row">
+      <span class="h-label">Federal judges</span>
+      <div class="h-bar accountable" style="width:45%">Can be imprisoned <span class="h-tag no">Accountable</span></div>
+    </div>
+    <div class="h-row">
+      <span class="h-label">Other federal employees</span>
+      <div class="h-bar accountable" style="width:30%">Standard legal exposure <span class="h-tag no">Accountable</span></div>
+    </div>
+  </div>
+
+  <div class="pull-quote" style="margin-top: 2rem;">
+    "The President's accountability to the law is an integral part of the separation of powers and the rule of law."
+    <cite>- ACLU amicus brief</cite>
+  </div>
+</section>
+
+<!-- COUNTERARGUMENT -->
+<section id="counterargument">
+  <p class="section-label">Counterargument &amp; Rebuttal</p>
+  <h2>The case for some immunity - and its limits</h2>
+
+  <div class="counter-layout">
+    <div class="counter-box claim">
+      <div class="box-label red"><span class="dot red"></span>Counterargument</div>
+      <h3 style="color: #e8907f;">Presidential immunity prevents fear-driven governance</h3>
+      <p style="font-size:0.95rem; color: var(--muted);">Some degree of immunity may be reasonable: without protection, outgoing presidents could be targeted by their successors for purely political revenge - what the Court called "frightful despotism" and "alternate domination of one faction over another." A president who fears prosecution might avoid bold but necessary decisions.</p>
+      <div class="pull-quote" style="margin-top: 1rem;">
+        "The Court hopes to spare the Republic from the 'frightful despotism' of 'alternate domination of one faction over another, sharpened by the spirit of revenge.'"
+        <cite>- Delahunty &amp; Yoo, Harvard JLPP</cite>
+      </div>
+    </div>
+
+    <div class="counter-box rebuttal">
+      <div class="box-label teal"><span class="dot teal"></span>Rebuttal</div>
+      <h3 style="color: var(--teal);">Undefined limits make immunity a blank check</h3>
+      <p style="font-size:0.95rem; color: var(--muted);">That concern only holds where immunity has clear, defined boundaries. The 2024 ruling rejected strong originalist evidence against presidential immunity and provided no workable standard for what counts as an "official act." Without clear limits, biased interpretation fills the gap - allowing serious misconduct to go unpunished. Presidents themselves historically acknowledged post-office prosecution risk; Gerald Ford considered a pardon for Nixon necessary precisely because prosecution was possible.</p>
+      <div class="pull-quote" style="margin-top: 1rem;">
+        "... even presidents themselves have recognized that they can be prosecuted after leaving office. That is why President Gerald Ford deemed it necessary to pardon President Richard Nixon in 1974..."
+        <cite>- ACLU</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSION -->
+<section id="conclusion">
+  <p class="section-label">Conclusion</p>
+  <p class="conclusion-pull">"This is not a feature of a democracy - it is a flaw in one."</p>
+  <p style="max-width: 680px; margin: 0 auto; color: var(--muted);">The 14th Amendment guarantees equal protection - but equal protection is meaningless without equal application. The presidency reinforces that the president is a citizen subject to the Constitution's full authority. Article VI makes the Constitution supreme law, meaning any ruling that contradicts its equal-protection guarantee is on unstable legal ground. A constitutional amendment does not create new law; it makes the existing demands of the Constitution explicit and ensures no future ruling can contradict it.</p>
+
+  <div class="thesis-block" style="margin: 3rem auto 0;">
+    <p>A constitutional amendment eliminating presidential immunity and barring convicted federal felons from office is not radical - it is the natural consequence of applying the Constitution's own text consistently to the office it was written to govern.</p>
+  </div>
+</section>
+
+<!-- WORKS CITED -->
+<section id="works-cited">
+  <p class="section-label">Works Cited</p>
+  <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem;">Sources</h2>
+
+  <div class="citation">Delahunty, Robert, and John Yoo. "The Presidential Immunity Decision." <em>Harvard Journal of Law &amp; Public Policy</em>, Harvard Law School, 2024. https://journals.law.harvard.edu/jlpp/the-presidential-immunity-decision-robert-delahunty-john-yoo/</div>
+
+  <div class="citation">"Felony Convictions to Presidential Positions: Should There Be a Limit on Holding Public Office?" <em>Houston Law Review</em>, University of Houston Law Center, 2024. https://houstonlawreview.org/article/147424</div>
+
+  <div class="citation">"Can a Criminal Conviction Bar Someone from Running for President?" <em>HowStuffWorks</em>, InfoSpace Holdings. https://people.howstuffworks.com/criminal-conviction-bar-running-for-president.htm</div>
+
+  <div class="citation">"Supreme Court Grants Trump Broad Immunity for Official Acts, Placing Presidents Above the Law." <em>American Civil Liberties Union</em>, ACLU, 1 Jul. 2024. https://www.aclu.org/press-releases/supreme-court-grants-trump-broad-immunity-for-official-acts-placing-presidents-above-the-law</div>
+
+  <div class="citation">"Can Felons Serve in US Elected Federal Offices?" <em>VOA News</em>, Voice of America, 2023. https://www.voanews.com/a/can-felons-serve-in-us-elected-federal-offices-/7014217.html</div>
+</section>
+
+<footer>
+  Presidential Accountability and the Law &nbsp;·&nbsp; Colin Moyer &nbsp;·&nbsp; Government SS04151 &nbsp;·&nbsp; April 2026 &nbsp;·&nbsp; Website assistance by Claude
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  const links = nav.querySelectorAll('a');
+  const sections = document.querySelectorAll('section[id]');
+  const progress = document.getElementById('progress');
+
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    progress.style.width = Math.min(100, (scrolled / total) * 100) + '%';
+
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+
+</body>
+</html>
